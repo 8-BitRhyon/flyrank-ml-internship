@@ -142,7 +142,7 @@
   <div class="abstract">
     <h2>Abstract</h2>
     <p>
-      With a portfolio of hundreds of thousands of pages and a 140-slot review budget, the question
+      With a portfolio of hundreds of thousands of pages and a working budget of 140 reviews, the question
       is which pages come first. Using 9.8 million daily rows from the FlyRank warehouse, this study
       builds March 2026 page-months and labels April CTR against position-tier peers. It compares a
       CTR-gap rule with four models on a client-grouped split, then repeats the test time-forward.
@@ -162,10 +162,10 @@
   <h2><span class="n">1</span>Introduction</h2>
   <p>
     FlyRank's content operation covers a large pseudonymized portfolio. The review team can open only
-    a fraction of it each month. That makes the work a queue problem, not a prediction problem. A team
-    can look at roughly 140 pages over seven weeks. Every page it opens costs an editor's time, and
-    every high-traffic page it skips keeps converting attention into clicks poorly. The question is
-    which pages to open first.
+    a fraction of it each month. That makes the work a queue problem, not a prediction problem. We
+    assume a team can look at roughly 140 pages over seven weeks. Every page it opens costs an
+    editor's time, and every high-traffic page it skips keeps converting attention into clicks poorly.
+    The question is which pages to open first.
   </p>
   <p>
     The obvious rule is to sort by the lowest click-through rate. That rule fails in a measurable way.
@@ -313,7 +313,7 @@
     <thead><tr><th>Design</th><th class="num">AUC</th><th class="num">Precision@140</th></tr></thead>
     <tbody>
       <tr><td>Model, client-grouped same period</td><td class="num">0.8308</td><td class="num">0.9857</td></tr>
-      <tr><td>Model, time-forward January into March</td><td class="num">0.7875</td><td class="num">0.8857</td></tr>
+      <tr><td>Model, time-forward Jan-Feb into Mar-Apr</td><td class="num">0.7875</td><td class="num">0.8857</td></tr>
       <tr class="highlight"><td>Value rule, same rows</td><td class="num">0.7627</td><td class="num">0.9786</td></tr>
     </tbody>
   </table>
@@ -353,6 +353,7 @@
     <li><strong>No engagement.</strong> GA4 is available on 4.21% of March rows, so on-page experience is outside the contract.</li>
     <li><strong>No causal claim.</strong> The queue identifies an association between position, CTR, and headroom. It does not prove that a rewrite recovers the gap.</li>
     <li><strong>No revenue.</strong> The score is in clicks, not money. Attaching a value per click is the team's decision.</li>
+    <li><strong>Working assumptions.</strong> The 140-review budget and the 1.5-hour review estimate are planning assumptions, not measurements.</li>
   </ul>
 
   <h2><span class="n">6</span>Ranked Recommendations</h2>
@@ -374,8 +375,8 @@
   </p>
 
   <p>
-    The top 140 carries about 11,700 clicks of expected gap, 12.1% of the in-scope gap. At 1.5 hours
-    per review, that is about 210 editor-hours, or 84 clicks of gap per review. Extending to 500
+    The top 140 carries about 11,700 clicks of expected gap, 12.1% of the in-scope gap. At an assumed
+    1.5 hours per review, that is about 210 editor-hours, or 84 clicks of gap per review. Extending to 500
     reviews adds about 11,800 clicks for 360 more reviews, about 33 per review. The first 140 are the
     better use of a small team's time.
   </p>
