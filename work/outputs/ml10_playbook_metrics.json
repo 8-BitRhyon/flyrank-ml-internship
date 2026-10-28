@@ -1,0 +1,27 @@
+{
+  "month": "2026-03",
+  "sealed_month": "2026-06",
+  "capacity_reviews": 140,
+  "in_scope_pages": 48725,
+  "march_page_months": 331437,
+  "coverage_pct": 14.7,
+  "ga4_share_pct": 4.21,
+  "total_gap_clicks": 96691.17,
+  "top140_gap_clicks": 11716.08,
+  "top140_share_pct": 12.12,
+  "top500_gap_clicks": 23497.55,
+  "top140_archetypes": {
+    "CTR_GAP_PRIME": 100,
+    "CTR_GAP_AGED": 36,
+    "VERIFY_FIRST": 4
+  },
+  "top140_tiers": {
+    "page_1": 102,
+    "top_3": 33,
+    "page_2": 5
+  },
+  "top140_median_age_days": 155,
+  "editor_hours_at_1_5h_per_review": 210,
+  "clicks_per_review_top140": 83.7,
+  "clicks_per_review_141_to_500": 32.7
+}
