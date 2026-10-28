@@ -1,0 +1,58 @@
+{
+  "lane": "CTR opportunity scoring for content review",
+  "month_features": "2026-03",
+  "month_label": "2026-04",
+  "sealed_month": "2026-06",
+  "features": [
+    "ctr_pct",
+    "avg_pos",
+    "march_impressions_log",
+    "position_sd",
+    "content_age_days"
+  ],
+  "test_base_rate": 0.5669,
+  "results": {
+    "gradient boosting": {
+      "auc": 0.8308,
+      "precision_140": 0.9857
+    },
+    "random forest": {
+      "auc": 0.8304,
+      "precision_140": 0.9857
+    },
+    "logistic regression": {
+      "auc": 0.8018,
+      "precision_140": 0.8
+    },
+    "decision tree (depth 3)": {
+      "auc": 0.7911,
+      "precision_140": 0.8286
+    },
+    "value rule": {
+      "auc": 0.7627,
+      "precision_140": 0.9786
+    }
+  },
+  "time_forward": {
+    "client-grouped, same period": {
+      "auc": 0.8308,
+      "precision_140": 0.9857
+    },
+    "time-forward Jan-Feb into Mar-Apr": {
+      "auc": 0.7875,
+      "precision_140": 0.8857
+    },
+    "value rule, same rows": {
+      "auc": 0.7627,
+      "precision_140": 0.9786
+    }
+  },
+  "in_scope_pages": 48725,
+  "top140_gap": 11716.08,
+  "top140_share_pct": 12.12,
+  "top140_archetypes": {
+    "CTR_GAP_PRIME": 100,
+    "CTR_GAP_AGED": 36,
+    "VERIFY_FIRST": 4
+  }
+}
