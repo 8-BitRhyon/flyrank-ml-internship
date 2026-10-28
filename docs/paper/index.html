@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Which Pages First? A Validated CTR Opportunity Queue for Content Review</title>
+<meta name="description" content="A validated CTR opportunity queue for content review, built on the FlyRank ML Internship warehouse. The rule matches or beats four learned models at a 140-page budget and survives a time-forward split.">
+<style>
+  :root {
+    --ink: #1b1b1b;
+    --muted: #5b5b5b;
+    --rule: #d9d5cc;
+    --paper: #fbfaf7;
+    --accent: #1f4e79;
+    --accent-soft: #eef3f8;
+    --warn: #8a2b2b;
+    --max: 780px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 56px 24px 80px; }
+  .eyebrow {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin: 0 0 18px;
+  }
+  h1 { font-size: 42px; line-height: 1.15; margin: 0 0 16px; letter-spacing: -0.01em; }
+  .subtitle { font-size: 20px; color: var(--muted); margin: 0 0 26px; line-height: 1.5; }
+  .byline {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 14px; color: var(--muted); border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule); padding: 12px 0; margin: 0 0 34px;
+  }
+  .byline a { color: var(--accent); }
+  .abstract {
+    background: var(--accent-soft); border-left: 4px solid var(--accent);
+    padding: 22px 26px; margin: 0 0 22px;
+  }
+  .abstract h2 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+    margin: 0 0 10px; color: var(--accent);
+  }
+  .abstract p { margin: 0; font-size: 17px; }
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin: 26px 0 40px;
+  }
+  .stat {
+    border: 1px solid var(--rule); background: #fff; padding: 14px 14px 12px;
+  }
+  .stat .num {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1.1;
+  }
+  .stat .lbl {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.35;
+  }
+  h2 {
+    font-size: 27px; line-height: 1.25; margin: 52px 0 14px;
+    padding-top: 10px; border-top: 1px solid var(--rule);
+  }
+  h2 .n {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 14px; color: var(--accent); margin-right: 10px; vertical-align: 3px;
+  }
+  h3 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px; letter-spacing: .02em; margin: 30px 0 10px; color: var(--ink);
+  }
+  p { margin: 0 0 16px; }
+  ul, ol { margin: 0 0 18px; padding-left: 24px; }
+  li { margin-bottom: 8px; }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0 12px; font-size: 15px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+  }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.highlight td { background: #fff; font-weight: 700; }
+  .caption {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13px; color: var(--muted); margin: 6px 0 26px; line-height: 1.5;
+  }
+  figure { margin: 26px 0 8px; }
+  figure img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); background: #fff; }
+  .note {
+    background: #fff; border: 1px solid var(--rule); padding: 16px 18px;
+    margin: 22px 0; font-size: 16px;
+  }
+  .note strong { color: var(--accent); }
+  .warn { border-left: 4px solid var(--warn); }
+  .footer {
+    margin-top: 60px; padding-top: 22px; border-top: 1px solid var(--rule);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13px; color: var(--muted); line-height: 1.6;
+  }
+  .footer a { color: var(--accent); }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.86em; background: #f1efe9; padding: 1px 5px; border-radius: 3px;
+  }
+  @media (max-width: 720px) {
+    body { font-size: 17px; }
+    .wrap { padding: 34px 18px 60px; }
+    h1 { font-size: 31px; }
+    .subtitle { font-size: 18px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    h2 { font-size: 23px; margin-top: 40px; }
+  }
+  @media print {
+    body { background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+    h2 { page-break-after: avoid; }
+    figure { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">FlyRank ML Internship &middot; Capstone Research Paper</p>
+  <h1>Which Pages First?</h1>
+  <p class="subtitle">A validated CTR opportunity queue for content review, built on 9.8 million rows of production search data.</p>
+  <p class="byline">
+    Rhyon Caleb Foz-Santos &middot; Machine Learning Track &middot; March 2026 data, paper deployed October 2026 &middot;
+    <a href="https://github.com/8-BitRhyon/flyrank-ml-internship">Repository</a>
+  </p>
+
+  <div class="abstract">
+    <h2>Abstract</h2>
+    <p>
+      A small content team can review about 140 pages over seven weeks, so the practical question is
+      which pages to open first. Using 9.8 million daily search-performance rows from the FlyRank
+      pseudonymized warehouse, this study builds one row per content page per month for March 2026 and
+      labels April 2026 CTR against March position-tier peers. It compares a transparent CTR-gap rule
+      with four learned models on a client-grouped split, then repeats the test with a time-forward
+      split. The rule reaches precision@140 of 0.979. Gradient boosting reaches 0.986, a one-page
+      difference that disappears across five split seeds, and falls to 0.886 under the time-forward
+      split while the rule holds. The result is a validated rule, a measured negative result for added
+      model complexity at this budget, and a human-reviewed action playbook with explicit limits.
+    </p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num">9.8M</div><div class="lbl">March daily rows scanned</div></div>
+    <div class="stat"><div class="num">58,477</div><div class="lbl">labeled page-months</div></div>
+    <div class="stat"><div class="num">0.979</div><div class="lbl">rule precision@140</div></div>
+    <div class="stat"><div class="num">0.886</div><div class="lbl">model precision@140, time-forward</div></div>
+  </div>
+
+  <h2><span class="n">1</span>Introduction</h2>
+  <p>
+    A content team with limited editors faces a queue problem, not a prediction problem. It can look
+    at roughly 140 pages over seven weeks. Every page it opens costs an editor's time, and every
+    high-traffic page it skips keeps converting attention into clicks poorly. The question is which
+    pages to open first.
+  </p>
+  <p>
+    The obvious rule is to sort by the lowest click-through rate. That rule fails in a measurable way.
+    On a 30,000-page teaching slice, the 140 pages with the lowest CTR carried one click in total,
+    because a page with zero clicks and a few thousand impressions always sorts first. A rule that
+    weights the CTR gap by impressions captured about 21,300 clicks of expected gap with the same 140
+    slots. The two queues shared zero pages. The choice of rule is the decision.
+  </p>
+  <p>
+    This paper asks whether a learned model can improve on the best hand rule at that budget. It
+    answers with a client-grouped split, a five-seed stability check, a time-forward split, and a
+    leakage audit. The answer is useful even though it is negative for the model: at 140 reviews, the
+    hand rule is the better queue, and the honest deliverable is a rule, a ranked action playbook, and
+    a human review step.
+  </p>
+
+  <h2><span class="n">2</span>Data</h2>
+  <p>
+    The data is the FlyRank internship warehouse, build <code>v20260703</code>, a pseudonymized star
+    schema hosted on Hugging Face. All identifiers are salted hashes. No client names, domains, URLs,
+    or raw queries appear in this paper, the notebooks, or the repository.
+  </p>
+  <table>
+    <thead><tr><th>Table</th><th>Grain</th><th>Use in this study</th></tr></thead>
+    <tbody>
+      <tr><td><code>fact_content_daily_performance</code></td><td>report date &times; client &times; content</td><td>Features and labels</td></tr>
+      <tr><td><code>dim_content</code></td><td>one row per content item</td><td>Content age, context</td></tr>
+      <tr><td><code>dim_clients</code></td><td>one row per client</td><td>Coverage context only</td></tr>
+    </tbody>
+  </table>
+  <p>
+    Features come from March 2026 (2026-03-01 to 2026-03-31). The label comes from April 2026
+    (2026-04-01 to 2026-04-30). The decision moment is April 1. June 2026 is the sealed final month
+    and was never used for development.
+  </p>
+  <p>
+    Three things are excluded on purpose. GA4 engagement columns are excluded because
+    <code>ga4_data_available IS TRUE</code> on only 4.21% of March rows, and requiring them would keep
+    the clients with the cleanest analytics rather than the pages that matter. The query table
+    <code>fact_content_query_90d</code> is excluded because its 90-day window overlaps both the feature
+    and label months. Client and content IDs are context only, never features.
+  </p>
+
+  <h2><span class="n">3</span>Methodology</h2>
+  <h3>Unit of analysis</h3>
+  <p>
+    One row is one content page for one client in one calendar month, a page-month. The March
+    partition holds 9,841,378 daily rows and rolls up to 331,437 page-months. The labeled cohort is
+    58,477 page-months across 31 clients.
+  </p>
+
+  <h3>Features</h3>
+  <table>
+    <thead><tr><th>Feature</th><th>Definition</th><th>Knowable on April 1 because</th></tr></thead>
+    <tbody>
+      <tr><td><code>ctr_pct</code></td><td>March clicks divided by March impressions, times 100</td><td>Both counters close on March 31</td></tr>
+      <tr><td><code>avg_pos</code></td><td>Impression-weighted mean March position</td><td>Every daily position is recorded in March</td></tr>
+      <tr><td><code>march_impressions_log</code></td><td>log1p of March impressions</td><td>A closed total on March 31</td></tr>
+      <tr><td><code>position_sd</code></td><td>Standard deviation of daily March position</td><td>Computed from March days only</td></tr>
+      <tr><td><code>content_age_days</code></td><td>Days from creation to 2026-03-31</td><td>The creation date is fixed before March</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Label</h3>
+  <p>
+    The label is a ranking proxy, not a revenue number. <code>low_ctr_next</code> is 1 when a page's
+    April CTR falls below the March CTR median of its own March position tier, for pages with at least
+    100 April impressions. The thresholds use March data only, so the rule is fixed on April 1. The
+    label base rate is 0.572.
+  </p>
+
+  <h3>Baseline</h3>
+  <p>
+    The baseline is a transparent value rule:
+    <code>max(0, tier_median_ctr - page_ctr) * impressions / 100</code>. It estimates the clicks a page
+    would gain over 90 days if it reached its tier median. It has no fitted weights. It is readable,
+    and an editor can disagree with it.
+  </p>
+
+  <h3>Models</h3>
+  <p>
+    Four models are compared: logistic regression, a depth-3 decision tree, a random forest, and
+    gradient boosting. The simpler models are included so that complexity has to earn its place. The
+    task is ranking, so every method is judged as a scorer at a fixed review budget.
+  </p>
+
+  <h3>Validation</h3>
+  <p>
+    The primary split is 70/30 grouped by client, seed 42, with zero client overlap. Pages from one
+    client share templates and traffic patterns, so a random split would let the model learn the
+    client instead of the pattern. The split is repeated with five seeds. A time-forward split trains
+    on January 2026 into February 2026 and tests on March into April, which mimics deployment.
+  </p>
+
+  <h3>Leakage checks</h3>
+  <p>
+    A label-derived column, April CTR, was added on purpose. It pushed AUC to 1.0000 and
+    precision@140 to 1.0000, which is what a leak looks like. The column was removed and the honest
+    number returned. The notebook also asserts that no April column enters the feature list, that no
+    product flag is used, and that the one outcome-dependent population choice is disclosed: the
+    100-impression April floor drops 829 of 59,306 eligible pages (1.4%).
+  </p>
+
+  <h2><span class="n">4</span>Results</h2>
+  <p>
+    Same rows, same split, same metric. Precision@K is the metric that matches a fixed review budget.
+    AUC is the ordering check, reported next to the base rate of 0.567.
+  </p>
+  <table>
+    <thead><tr><th>Model</th><th class="num">AUC</th><th class="num">Precision@140</th></tr></thead>
+    <tbody>
+      <tr><td>Gradient boosting</td><td class="num">0.8308</td><td class="num">0.9857</td></tr>
+      <tr><td>Random forest</td><td class="num">0.8304</td><td class="num">0.9857</td></tr>
+      <tr><td>Logistic regression</td><td class="num">0.8018</td><td class="num">0.8000</td></tr>
+      <tr><td>Decision tree, depth 3</td><td class="num">0.7911</td><td class="num">0.8286</td></tr>
+      <tr class="highlight"><td>Value rule (baseline)</td><td class="num">0.7627</td><td class="num">0.9786</td></tr>
+    </tbody>
+  </table>
+  <p class="caption">
+    Table 1. Client-grouped split, 31,246 test pages from 10 clients. Random precision@140 is 0.567.
+  </p>
+
+  <figure>
+    <img src="figures/capstone_model_vs_baseline.png" alt="Bar chart of AUC and precision at 140 for four models and the value rule.">
+  </figure>
+  <p class="caption">
+    Figure 1. The rule and the tree ensembles are close at precision@140. Logistic regression has a
+    better AUC than the rule but a much worse queue, because a linear score cannot represent the
+    position-tier interaction.
+  </p>
+
+  <p>
+    Gradient boosting edges the rule by one page out of 140. That is not a business result. Across
+    five split seeds the model wins three, ties one, and loses one by four pages. The honest reading is
+    a tie at this budget.
+  </p>
+
+  <h3>The time-forward test changes the answer</h3>
+  <p>
+    A model trained on January into February and tested on March into April drops to 0.886
+    precision@140, while the rule holds at 0.979 on the same rows. The same-period estimate was
+    optimistic by about 14 slots.
+  </p>
+  <table>
+    <thead><tr><th>Design</th><th class="num">AUC</th><th class="num">Precision@140</th></tr></thead>
+    <tbody>
+      <tr><td>Model, client-grouped same period</td><td class="num">0.8308</td><td class="num">0.9857</td></tr>
+      <tr><td>Model, time-forward January into March</td><td class="num">0.7875</td><td class="num">0.8857</td></tr>
+      <tr class="highlight"><td>Value rule, same rows</td><td class="num">0.7627</td><td class="num">0.9786</td></tr>
+    </tbody>
+  </table>
+  <p class="caption">
+    Table 2. Same test rows for all three rows. The rule is period-adaptive because it uses the
+    current month's tier medians, so it does not degrade the way a frozen model does.
+  </p>
+
+  <figure>
+    <img src="figures/capstone_time_forward.png" alt="Bar chart comparing precision at 140 for the same-period model, the time-forward model, and the rule.">
+  </figure>
+  <p class="caption">
+    Figure 2. Under the deployment-like split, the model loses about 14 of the 140 slots and the rule
+    stays at the top.
+  </p>
+
+  <h3>What the errors look like</h3>
+  <p>
+    The model's top 140 contained two misses. Both were top-3 pages with a March CTR near zero (0.018%
+    to 0.035%) whose April CTR recovered to 0.345% and 0.679%. The model read a large gap and expected
+    it to persist. The month was the anomaly.
+  </p>
+  <p>
+    The more interesting errors are false negatives. One deep page had 12,359 impressions and a 0.55%
+    March CTR that fell to 0.000 in April. It ranked 31,142 of 31,246. The label is tier-relative, so a
+    page that was strong in absolute terms becomes a positive when it falls below a low tier median.
+    That is a property of the label definition, not a model bug, and a zero April CTR can also be a
+    tracking gap.
+  </p>
+
+  <h2><span class="n">5</span>Limitations</h2>
+  <ul>
+    <li><strong>Coverage.</strong> 48,725 of 331,437 March page-months (14.7%) are in scope for CTR work. The rest are below the 500-impression floor, have no position data, or are deep pages where ranking is the constraint.</li>
+    <li><strong>One month.</strong> The label is one forward month. April 2026 is a single period and sits right before the sealed June month.</li>
+    <li><strong>Tier-relative proxy.</strong> A page with a healthy absolute CTR can be flagged if it falls below a low tier median. The deep tier median is about 0.07%.</li>
+    <li><strong>Population selection.</strong> The label needs at least 100 April impressions, which drops 829 of 59,306 eligible pages (1.4%). That is outcome-month selection, disclosed.</li>
+    <li><strong>No engagement.</strong> GA4 is available on 4.21% of March rows, so on-page experience is outside the contract.</li>
+    <li><strong>No causal claim.</strong> The queue identifies an association between position, CTR, and headroom. It does not prove that a rewrite recovers the gap.</li>
+    <li><strong>No revenue.</strong> The score is in clicks, not money. Attaching a value per click is the team's decision.</li>
+  </ul>
+
+  <h2><span class="n">6</span>Ranked Recommendations</h2>
+  <p>
+    The playbook uses the validated rule, not the model. Three archetypes map to three actions, and
+    the age of a page decides whether the action is a snippet edit or a refresh.
+  </p>
+  <table>
+    <thead><tr><th>Archetype</th><th>Reason code</th><th>Action</th><th class="num">Top 140</th></tr></thead>
+    <tbody>
+      <tr><td>Near-zero CTR at volume</td><td><code>VERIFY_FIRST</code></td><td>Check tracking and query mix before any edit</td><td class="num">4</td></tr>
+      <tr><td>Aged snippet gap, 270+ days</td><td><code>CTR_GAP_AGED</code></td><td>Refresh the page, then rewrite the snippet</td><td class="num">36</td></tr>
+      <tr><td>Prime snippet gap</td><td><code>CTR_GAP_PRIME</code></td><td>Rewrite the title and meta description</td><td class="num">100</td></tr>
+    </tbody>
+  </table>
+  <p class="caption">
+    Table 3. The 140-slot queue for March 2026, after excluding deep pages and requiring 500
+    impressions and 20 days of search data.
+  </p>
+
+  <p>
+    The top 140 carries about 11,700 clicks of expected gap, 12.1% of the in-scope gap. At 1.5 hours
+    per review, that is about 210 editor-hours, or 84 clicks of gap per review. Extending to 500
+    reviews adds about 11,800 clicks for 360 more reviews, about 33 per review. The first 140 are the
+    better use of a small team's time.
+  </p>
+
+  <figure>
+    <img src="figures/capstone_gap_capture.png" alt="Line chart of cumulative share of the click gap captured as pages reviewed increases, with a marker at 140 reviews.">
+  </figure>
+  <p class="caption">
+    Figure 3. The gap capture curve flattens quickly. The 140-slot budget is a defensible stopping
+    point for a small team.
+  </p>
+
+  <div class="note">
+    <strong>Human review is part of the method.</strong> Before an edit, an editor checks the query
+    report, the SERP, tracking, recency, and client ownership. The rule is intentionally simple so
+    that an editor can read the reason code and disagree with it.
+  </div>
+
+  <div class="note warn">
+    <strong>What must not be automated:</strong> title or meta changes, publishing, bulk edits without
+    a 10% sample review, client-facing promises, editor performance reviews, deep pages in a CTR
+    queue, and any use of the sealed June 2026 month in development.
+  </div>
+
+  <h2><span class="n">7</span>Reproducibility</h2>
+  <p>
+    Everything is in the public repository:
+    <a href="https://github.com/8-BitRhyon/flyrank-ml-internship">github.com/8-BitRhyon/flyrank-ml-internship</a>.
+    The notebooks are executed and committed.
+  </p>
+  <ul>
+    <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/w03_data_contract.ipynb">Data contract</a>: grain, windows, label, exclusions, and the three verification queries.</li>
+    <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/w04_baseline_score.ipynb">Baseline</a>: two signal checks, the value rule, the ranked queue, and the top-ten review.</li>
+    <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/w05_model.ipynb">Model comparison</a>: four models against the rule, five split seeds, permutation importance.</li>
+    <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/w06_validation_audit.ipynb">Validation audit</a>: time-forward split, leakage tests, failure examples, claim rewrite.</li>
+    <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/w07_action_playbook.ipynb">Action playbook</a>: archetypes, cost and value, monitoring triggers, no-go list.</li>
+    <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/capstone.ipynb">Capstone notebook</a>: mirrors this paper end to end.</li>
+  </ul>
+  <p>
+    Seeds are fixed at 42 and row order is sorted before every split. The metrics receipts are
+    <a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/outputs/capstone_metrics.json"><code>capstone_metrics.json</code></a>
+    and <a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/outputs/ml10_playbook_metrics.json"><code>ml10_playbook_metrics.json</code></a>.
+    To regenerate the paper artifacts, run <code>work/notebooks/capstone.ipynb</code> top to bottom
+    with a Hugging Face read token in the environment as <code>HF_TOKEN</code>. The notebook clones
+    nothing and reads the warehouse through DuckDB.
+  </p>
+
+  <h2><span class="n">8</span>Acknowledgments &amp; Data Credit</h2>
+  <p>
+    Built on the FlyRank ML Internship dataset:
+    <a href="https://flyrank.ai">flyrank.ai</a>. The warehouse is a pseudonymized, gated release. All
+    identifiers in this work are hashed. No client names, domains, URLs, or private queries appear in
+    this paper, its figures, or the repository.
+  </p>
+
+  <div class="footer">
+    <p>
+      Rhyon Caleb Foz-Santos &middot; Machine Learning Track &middot; FlyRank ML Internship.
+      Paper built from the repository notebooks and metrics receipts. Claims are observed, measured,
+      directional, or decision-support. No causal claim is made without an experiment.
+    </p>
+    <p>
+      Cite this work: Foz-Santos, R. C. (2026). <em>Which Pages First? A Validated CTR Opportunity
+      Queue for Content Review.</em> FlyRank ML Internship.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
