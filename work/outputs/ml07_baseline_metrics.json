@@ -1,0 +1,18 @@
+{
+  "signals": {
+    "ctr_vs_position": "CONFIRMED",
+    "volume_concentration": "CONFIRMED"
+  },
+  "rule": {
+    "score": "max(0, tier_median_ctr - ctr) * impressions_90d / 100",
+    "reason_code": "CTR_GAP_VS_TIER",
+    "action_label": "REVIEW_TITLE_META"
+  },
+  "queue": {
+    "rows": 11621,
+    "impressions_floor": 1500,
+    "total_expected_click_gap": 67901.37,
+    "top140_gap": 21300.11,
+    "top140_share_of_gap_pct": 31.37
+  }
+}
