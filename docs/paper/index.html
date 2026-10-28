@@ -142,15 +142,13 @@
   <div class="abstract">
     <h2>Abstract</h2>
     <p>
-      A small content team can review about 140 pages over seven weeks, so the practical question is
-      which pages to open first. Using 9.8 million daily search-performance rows from the FlyRank
-      pseudonymized warehouse, this study builds one row per content page per month for March 2026 and
-      labels April 2026 CTR against March position-tier peers. It compares a transparent CTR-gap rule
-      with four learned models on a client-grouped split, then repeats the test with a time-forward
-      split. The rule reaches precision@140 of 0.979. Gradient boosting reaches 0.986, a one-page
-      difference that disappears across five split seeds, and falls to 0.886 under the time-forward
-      split while the rule holds. The result is a validated rule, a measured negative result for added
-      model complexity at this budget, and a human-reviewed action playbook with explicit limits.
+      With a portfolio of hundreds of thousands of pages and a 140-slot review budget, the question
+      is which pages come first. Using 9.8 million daily rows from the FlyRank warehouse, this study
+      builds March 2026 page-months and labels April CTR against position-tier peers. It compares a
+      CTR-gap rule with four models on a client-grouped split, then repeats the test time-forward.
+      The rule reaches precision@140 of 0.979, and the best model reaches 0.986 in-period but 0.886
+      time-forward. The result is a validated rule, a measured negative result for added model
+      complexity, and a human-reviewed action playbook.
     </p>
   </div>
 
@@ -163,10 +161,11 @@
 
   <h2><span class="n">1</span>Introduction</h2>
   <p>
-    A content team with limited editors faces a queue problem, not a prediction problem. It can look
-    at roughly 140 pages over seven weeks. Every page it opens costs an editor's time, and every
-    high-traffic page it skips keeps converting attention into clicks poorly. The question is which
-    pages to open first.
+    FlyRank's content operation covers a large pseudonymized portfolio. The review team can open only
+    a fraction of it each month. That makes the work a queue problem, not a prediction problem. A team
+    can look at roughly 140 pages over seven weeks. Every page it opens costs an editor's time, and
+    every high-traffic page it skips keeps converting attention into clicks poorly. The question is
+    which pages to open first.
   </p>
   <p>
     The obvious rule is to sort by the lowest click-through rate. That rule fails in a measurable way.
