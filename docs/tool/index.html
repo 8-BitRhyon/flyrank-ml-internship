@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Queue Builder - Score your own page list</title>
+<style>
+  :root { --ink:#1b1b1b; --muted:#5b5b5b; --rule:#d9d5cc; --paper:#fbfaf7; --accent:#1f4e79; --warn:#8a2b2b; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height:1.6; }
+  .wrap { max-width:1100px; margin:0 auto; padding:48px 22px 70px; }
+  .eyebrow { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:700; margin:0 0 12px; }
+  h1 { font-size:34px; margin:0 0 10px; }
+  .sub { color:var(--muted); font-size:17px; margin:0 0 22px; max-width:780px; }
+  .panel { background:#fff; border:1px solid var(--rule); padding:20px; margin:0 0 22px; }
+  .panel h2 { font-size:17px; margin:0 0 10px; }
+  .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:10px 0; }
+  button { border:1px solid var(--accent); background:var(--accent); color:#fff; padding:9px 14px;
+    border-radius:6px; font-size:14px; cursor:pointer; }
+  button.secondary { background:#fff; color:var(--accent); }
+  input[type="file"] { font-size:14px; }
+  textarea { width:100%; min-height:120px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size:12px; padding:10px; border:1px solid var(--rule); border-radius:6px; }
+  code { font-family:ui-monospace, SFMono-Regular, Menlo, monospace; background:#f1efe9; padding:2px 5px; border-radius:3px; font-size:0.9em; }
+  table { width:100%; border-collapse:collapse; font-size:13px; background:#fff; }
+  th, td { padding:8px 9px; border-bottom:1px solid var(--rule); text-align:left; }
+  th { font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); background:#f4f1ea; }
+  td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
+  .tag { display:inline-block; padding:2px 7px; border-radius:4px; font-size:11px; font-weight:700; color:#fff; }
+  .CTR_GAP_PRIME { background:#1f4e79; } .CTR_GAP_AGED { background:#8a5a00; } .VERIFY_FIRST { background:#8a2b2b; }
+  .note { font-size:13px; color:var(--muted); }
+  .warn { border-left:4px solid var(--warn); padding-left:12px; }
+  .hidden { display:none; }
+  @media (max-width:720px) { h1 { font-size:26px; } table { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">FlyRank ML Internship &middot; Capstone</p>
+  <h1>Queue Builder</h1>
+  <p class="sub">Score your own page list with the validated rule. The file stays in your browser.
+  Nothing is uploaded, stored, or sent anywhere.</p>
+
+  <div class="panel">
+    <h2>1. Load a CSV</h2>
+    <p class="note">Required columns: <code>page</code> (or any label), <code>impressions</code>,
+    <code>clicks</code>, <code>avg_position</code>. Optional: <code>age_days</code>.
+    Alias names such as <code>imp</code>, <code>clk</code>, and <code>position</code> are accepted.</p>
+    <div class="row">
+      <input type="file" id="file" accept=".csv,text/csv">
+      <button class="secondary" id="sample">Use sample data</button>
+    </div>
+    <div class="row">
+      <textarea id="paste" placeholder="page,impressions,clicks,avg_position,age_days&#10;example-page,120000,40,4.2,180"></textarea>
+    </div>
+    <div class="row">
+      <button id="score">Score the list</button>
+      <button class="secondary hidden" id="download">Download CSV</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>2. Ranked queue</h2>
+    <p class="note" id="summary">No data yet.</p>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th class="n">Rank</th><th>Page</th><th>Tier</th><th class="n">Impressions</th>
+        <th class="n">CTR</th><th class="n">Position</th><th class="n">Age</th><th class="n">Gap</th>
+        <th>Reason</th><th>Action</th></tr></thead>
+        <tbody id="rows"><tr><td colspan="10" class="note">Load a list to see the queue.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel warn">
+    <h2>What this tool does, and what it does not</h2>
+    <p class="note">It applies the transparent value rule from the paper, not the 25-feature model.
+    Tier medians are computed from the rows you load, so the queue is relative to your own list.
+    Deep pages (position above 20) and pages below 500 impressions are excluded. The result is
+    decision-support for review order, not a forecast of recovered clicks.</p>
+    <p class="note">Read the <a href="../paper/">paper</a> for the method, the validation, and the limits.
+    The API is at <a href="https://flyrank-ctr-queue.rhyonfs.workers.dev/queue?limit=5">flyrank-ctr-queue.rhyonfs.workers.dev</a>.</p>
+  </div>
+</div>
+
+<script>
+  const ACTIONS = {
+    CTR_GAP_PRIME: "Rewrite the title and meta description",
+    CTR_GAP_AGED: "Refresh the page, then rewrite the snippet",
+    VERIFY_FIRST: "Check tracking and query mix before any edit",
+  };
+  const SAMPLE = "page,impressions,clicks,avg_position,age_days\n" +
+    "guide-to-x,212404,24,2.3,69\n" +
+    "pricing-page,134984,1,4.8,410\n" +
+    "comparison-post,52000,12,7.2,150\n" +
+    "old-tutorial,88000,7,12.4,320\n" +
+    "product-faq,1500,2,18.0,90\n" +
+    "deep-archive,30000,40,45.0,200\n";
+
+  const $ = (id) => document.getElementById(id);
+
+  function splitCSV(line) {
+    const out = [];
+    let cur = "", q = false;
+    for (const ch of line) {
+      if (ch === '"') { q = !q; continue; }
+      if (ch === "," && !q) { out.push(cur); cur = ""; continue; }
+      cur += ch;
+    }
+    out.push(cur);
+    return out.map((s) => s.trim());
+  }
+
+  function parse(text) {
+    const lines = text.trim().split(/\r?\n/).filter(Boolean);
+    if (lines.length < 2) return [];
+    const head = splitCSV(lines[0]).map((h) => h.toLowerCase());
+    const pick = (names) => head.findIndex((h) => names.includes(h));
+    const iP = pick(["page", "url", "content", "content_id"]);
+    const iI = pick(["impressions", "imp", "impressions_90d"]);
+    const iC = pick(["clicks", "clk", "clicks_90d"]);
+    const iPos = pick(["avg_position", "position", "pos"]);
+    const iA = pick(["age_days", "age", "content_age_days"]);
+    if (iI < 0 || iC < 0 || iPos < 0) return [];
+    return lines.slice(1).map((line) => {
+      const c = splitCSV(line);
+      const imp = Number(c[iI]), clk = Number(c[iC]), pos = Number(c[iPos]);
+      if (!Number.isFinite(imp) || !Number.isFinite(clk) || !Number.isFinite(pos) || imp <= 0) return null;
+      return {
+        page: iP >= 0 && c[iP] ? c[iP] : "page",
+        impressions: imp,
+        clicks: clk,
+        ctr: (clk / imp) * 100,
+        position: pos,
+        age: iA >= 0 && Number.isFinite(Number(c[iA])) ? Number(c[iA]) : 0,
+      };
+    }).filter(Boolean);
+  }
+
+  function tierOf(pos) {
+    if (pos <= 3) return "top_3";
+    if (pos <= 10) return "page_1";
+    if (pos <= 20) return "page_2";
+    return "deep";
+  }
+
+  function median(values) {
+    if (!values.length) return 0;
+    const s = [...values].sort((a, b) => a - b);
+    const m = Math.floor(s.length / 2);
+    return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+  }
+
+  let lastRows = [];
+
+  function score(rows) {
+    const inScope = rows.filter((r) => r.impressions >= 500).map((r) => ({ ...r, tier: tierOf(r.position) }));
+    const medians = {};
+    for (const t of ["top_3", "page_1", "page_2"]) {
+      medians[t] = median(inScope.filter((r) => r.tier === t).map((r) => r.ctr));
+    }
+    return inScope
+      .filter((r) => r.tier !== "deep")
+      .map((r) => {
+        const gap = Math.max(0, medians[r.tier] - r.ctr) * r.impressions / 100;
+        let archetype = "CTR_GAP_PRIME";
+        if (r.impressions >= 100000 && r.ctr < 0.02) archetype = "VERIFY_FIRST";
+        else if (r.age >= 270) archetype = "CTR_GAP_AGED";
+        return { ...r, gap, archetype, action: ACTIONS[archetype] };
+      })
+      .sort((a, b) => b.gap - a.gap)
+      .map((r, i) => ({ ...r, rank: i + 1 }));
+  }
+
+  function render(rows, total) {
+    lastRows = rows;
+    const body = $("rows");
+    if (!rows.length) {
+      body.innerHTML = '<tr><td colspan="10" class="note">No rows in scope. Check the columns and the 500-impression floor.</td></tr>';
+      $("summary").textContent = "No rows in scope.";
+      $("download").classList.add("hidden");
+      return;
+    }
+    body.innerHTML = rows.map((r) => `<tr>
+      <td class="n">${r.rank}</td><td>${r.page}</td><td>${r.tier}</td>
+      <td class="n">${r.impressions.toLocaleString("en-US")}</td>
+      <td class="n">${r.ctr.toFixed(2)}%</td>
+      <td class="n">${r.position.toFixed(1)}</td>
+      <td class="n">${r.age ? r.age.toLocaleString("en-US") : "-"}</td>
+      <td class="n">${r.gap.toLocaleString("en-US", { maximumFractionDigits: 0 })}</td>
+      <td><span class="tag ${r.archetype}">${r.archetype}</span></td>
+      <td>${r.action}</td></tr>`).join("");
+    const gap = rows.reduce((s, r) => s + r.gap, 0);
+    $("summary").textContent = `${rows.length} of ${total} rows in scope. ${gap.toLocaleString("en-US", { maximumFractionDigits: 0 })} clicks of expected gap.`;
+    $("download").classList.remove("hidden");
+  }
+
+  $("score").addEventListener("click", () => {
+    const text = $("paste").value.trim() || "";
+    const rows = parse(text);
+    render(score(rows), rows.length);
+  });
+
+  $("sample").addEventListener("click", () => {
+    $("paste").value = SAMPLE;
+    const rows = parse(SAMPLE);
+    render(score(rows), rows.length);
+  });
+
+  $("file").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      $("paste").value = String(reader.result);
+      const rows = parse(String(reader.result));
+      render(score(rows), rows.length);
+    };
+    reader.readAsText(file);
+  });
+
+  $("download").addEventListener("click", () => {
+    const head = "rank,page,tier,impressions,clicks,ctr_pct,avg_position,age_days,expected_click_gap,archetype,action\n";
+    const lines = lastRows.map((r) => [r.rank, `"${r.page}"`, r.tier, r.impressions, r.clicks,
+      r.ctr.toFixed(4), r.position, r.age, r.gap.toFixed(2), r.archetype, `"${r.action}"`].join(","));
+    const blob = new Blob([head + lines.join("\n")], { type: "text/csv" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "queue.csv";
+    a.click();
+  });
+</script>
+</body>
+</html>

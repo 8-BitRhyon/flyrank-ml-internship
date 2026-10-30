@@ -112,6 +112,7 @@ html = f"""<!DOCTYPE html>
     The queue is decision-support, not a forecast. Read the
     <a href="../paper/">paper</a> for the method, the validation, and the limits. Use the
     <a href="https://flyrank-ctr-queue.rhyonfs.workers.dev/queue?limit=20">JSON API</a> for programmatic access.
+    Score your own list in the <a href="../tool/">queue builder</a>.
   </p>
 </div>
 <script>

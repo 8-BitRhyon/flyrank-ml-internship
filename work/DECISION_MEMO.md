@@ -66,6 +66,7 @@ hours per review, that is about 210 editor-hours, or 84 clicks of gap per review
 
 - Paper: https://8-bitrhyon.github.io/flyrank-ml-internship/paper/
 - Queue explorer: https://8-bitrhyon.github.io/flyrank-ml-internship/queue/
+- Queue builder: https://8-bitrhyon.github.io/flyrank-ml-internship/tool/
 - Live API: https://flyrank-ctr-queue.rhyonfs.workers.dev/queue?limit=5
 - Model card: `MODEL_CARD.md`
 - Data card: `DATA_CARD.md`

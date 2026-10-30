@@ -51,6 +51,7 @@ Five-fold client-grouped CV, March 2026 features into April 2026 labels.
 - Bootstrap 95% interval on the gap over the rule at K=140: **+1.4 to +10.0 points**.
 - Time-forward test, trained on January-February and tested on March-April: **0.971 at K=140**, against **0.943** for the rule.
 - Top-140 misses fall from about 5 to about 2 per 140 reviewed.
+- Calibration: **Brier 0.162**, reliability curve close to the diagonal.
 
 ## Limits
 

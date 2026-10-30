@@ -29,6 +29,20 @@ for _, r in df.iterrows():
         "action": r["action"],
     })
 
+full = pd.read_csv(SRC)
+top140 = full.head(140)
+stats = {
+    "month": "2026-03",
+    "in_scope_pages": int(len(full)),
+    "total_gap_clicks": round(float(full.gap.sum()), 2),
+    "top140_gap_clicks": round(float(top140.gap.sum()), 2),
+    "top140_share_pct": round(100 * float(top140.gap.sum()) / float(full.gap.sum()), 2),
+    "top140_archetypes": {str(k): int(v) for k, v in top140.archetype.value_counts().items()},
+}
+
 OUT.parent.mkdir(parents=True, exist_ok=True)
-OUT.write_text("export default " + json.dumps(rows, indent=2) + ";\n")
+OUT.write_text(
+    "export const stats = " + json.dumps(stats, indent=2) + ";\n\n"
+    "export default " + json.dumps(rows, indent=2) + ";\n"
+)
 print(f"wrote {OUT} with {len(rows)} rows")

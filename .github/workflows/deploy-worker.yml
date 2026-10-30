@@ -1,0 +1,32 @@
+name: deploy-worker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "work/api/**"
+      - ".github/workflows/deploy-worker.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Skip when the token is absent
+        if: env.CLOUDFLARE_API_TOKEN == ''
+        run: echo "CLOUDFLARE_API_TOKEN is not set. Add the secret to enable deploys."
+
+      - uses: actions/setup-node@v4
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        with:
+          node-version: 20
+
+      - name: Deploy the queue API
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        working-directory: work/api
+        run: npx -y wrangler@4 deploy

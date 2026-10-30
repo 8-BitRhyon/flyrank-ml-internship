@@ -18,6 +18,7 @@ import numpy as np
 import pandas as pd
 from huggingface_hub import get_token
 from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.metrics import brier_score_loss
 from sklearn.model_selection import GroupKFold
 
 BASE = "hf://datasets/FlyRank/internship-warehouse"
@@ -193,6 +194,22 @@ for k in [50, 140]:
         "prob_gap_positive": float((gaps > 0).mean()),
     }
 
+prob = late_oof["rich"]
+brier = brier_score_loss(y_late, prob)
+edges = np.linspace(0.0, 1.0, 11)
+bin_idx = np.clip(np.digitize(prob, edges) - 1, 0, 9)
+calibration = []
+for b in range(10):
+    mask = bin_idx == b
+    if mask.any():
+        calibration.append({
+            "bin_low": float(edges[b]),
+            "bin_high": float(edges[b + 1]),
+            "mean_predicted": float(prob[mask].mean()),
+            "observed": float(y_late[mask].mean()),
+            "n": int(mask.sum()),
+        })
+
 colors = {"rule": "#c00000", "basic": "#7f7f7f", "rich": "#1f4e79"}
 fig, ax = plt.subplots(figsize=(8.2, 4.6))
 for name in ["rule", "basic", "rich"]:
@@ -243,6 +260,20 @@ fig.tight_layout()
 fig.savefig(FIG / "bootstrap_gap.png", dpi=150)
 plt.close(fig)
 
+fig, ax = plt.subplots(figsize=(5.6, 5.0))
+ax.plot([0, 1], [0, 1], ls="--", color="#7f7f7f", lw=1)
+ax.plot([c["mean_predicted"] for c in calibration], [c["observed"] for c in calibration],
+        marker="o", color="#1f4e79", lw=2)
+ax.set_xlabel("predicted probability")
+ax.set_ylabel("observed rate")
+ax.set_title(f"Calibration, out-of-fold (Brier {brier:.3f})")
+ax.set_xlim(0, 1)
+ax.set_ylim(0, 1)
+ax.grid(alpha=0.25)
+fig.tight_layout()
+fig.savefig(FIG / "calibration.png", dpi=150)
+plt.close(fig)
+
 metrics = {
     "ks": KS,
     "late_rows": int(len(late)),
@@ -254,6 +285,7 @@ metrics = {
     "early_cv": early_cv,
     "time_forward": forward,
     "bootstrap": boot,
+    "calibration": {"brier": float(brier), "bins": calibration},
 }
 (OUT / "excellence_metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")
 

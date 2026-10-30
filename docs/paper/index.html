@@ -276,6 +276,20 @@
     interval touches zero, which is why the K=140 claim is the stronger one.
   </p>
 
+  <h3>Is the score calibrated?</h3>
+  <p>
+    The Brier score is 0.162, and the reliability curve tracks the diagonal. A predicted 0.8 behaves
+    like an 80% chance, so the score can be read as a probability, not only as an ordering.
+  </p>
+
+  <figure>
+    <img src="figures/calibration.png" alt="Reliability curve plotting predicted probability against observed rate, close to the diagonal.">
+  </figure>
+  <p class="caption">
+    Figure 4. Out-of-fold calibration, ten bins. Bins sit on or near the diagonal, so the probability
+    is usable as a confidence, not just a rank.
+  </p>
+
   <h3>What survives a time-forward test</h3>
   <p>
     A model trained on January into February and tested on March into April is the deployment-like
@@ -371,6 +385,7 @@
   </p>
   <ul>
     <li><a href="../queue/">Queue explorer</a>: the top 200 queue rows with filters.</li>
+    <li><a href="../tool/">Queue builder</a>: score your own page list in the browser.</li>
     <li><a href="https://flyrank-ctr-queue.rhyonfs.workers.dev/queue?limit=5">Live queue API</a>: a JSON endpoint on Cloudflare Workers. Try <code>/health</code> and <code>/queue?limit=5</code>.</li>
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/MODEL_CARD.md">Model card</a> and <a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/DATA_CARD.md">data card</a>: intended use, limits, provenance.</li>
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/DECISION_MEMO.md">Decision memo</a>: the one-page version for an editor.</li>

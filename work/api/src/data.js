@@ -1,3 +1,16 @@
+export const stats = {
+  "month": "2026-03",
+  "in_scope_pages": 48725,
+  "total_gap_clicks": 96691.17,
+  "top140_gap_clicks": 11716.08,
+  "top140_share_pct": 12.12,
+  "top140_archetypes": {
+    "CTR_GAP_PRIME": 100,
+    "CTR_GAP_AGED": 36,
+    "VERIFY_FIRST": 4
+  }
+};
+
 export default [
   {
     "rank": 1,
