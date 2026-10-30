@@ -29,6 +29,9 @@ class. At K=5000 the rule wins under the time-forward test, so the recommendatio
 |---|---|
 | `docs/paper/` | The deployed research paper |
 | `docs/queue/` | The static queue explorer |
+| `MODEL_CARD.md` | Intended use, performance, limits, maintenance |
+| `DATA_CARD.md` | Tables, windows, exclusions, known issues |
+| `work/DECISION_MEMO.md` | One-page version for an editor |
 | `work/notebooks/` | Executed assignment notebooks and the capstone |
 | `work/scripts/excellence_analysis.py` | Rich features, five-fold CV, bootstrap, two-period replication |
 | `work/scripts/build_queue_explorer.py` | Builds the queue explorer page |

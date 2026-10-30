@@ -263,6 +263,10 @@
     of resamples favor the model. At K=50 the gap is +6.2 points, with an interval of 0.0 to +12.0,
     so the small-budget result is directionally positive but touches zero.
   </p>
+  <p>
+    Another way to read the same result: in a 140-page queue, the rule misses about five pages and
+    the model misses about two. That is a 62% reduction in misses at the same review budget.
+  </p>
 
   <figure>
     <img src="figures/bootstrap_gap.png" alt="Dot plot of the rich model minus rule precision gap at K=50 and K=140, with 95% bootstrap intervals.">
@@ -342,6 +346,10 @@
     1.5 hours per review, that is about 210 editor-hours, or 84 clicks of gap per review. Extending to
     500 reviews adds about 11,800 clicks for 360 more reviews, about 33 per review.
   </p>
+  <p>
+    A one-page version of this section is in the
+    <a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/DECISION_MEMO.md">decision memo</a>.
+  </p>
 
   <div class="note">
     <strong>Human review is part of the method.</strong> Before an edit, an editor checks the query
@@ -363,6 +371,8 @@
   </p>
   <ul>
     <li><a href="../queue/">Queue explorer</a>: the top 200 queue rows with filters.</li>
+    <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/MODEL_CARD.md">Model card</a> and <a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/DATA_CARD.md">data card</a>: intended use, limits, provenance.</li>
+    <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/DECISION_MEMO.md">Decision memo</a>: the one-page version for an editor.</li>
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/scripts/excellence_analysis.py">Excellence analysis</a>: rich features, five-fold CV, bootstrap, two-period replication, figures.</li>
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/capstone.ipynb">Capstone notebook</a>: mirrors this paper end to end.</li>
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/w03_data_contract.ipynb">Data contract</a>: grain, windows, label, exclusions, three verification queries.</li>
