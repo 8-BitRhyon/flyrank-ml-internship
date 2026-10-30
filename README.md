@@ -5,6 +5,7 @@ A CTR opportunity model for content review, built on 9.8 million daily rows from
 
 **Paper:** https://8-bitrhyon.github.io/flyrank-ml-internship/paper/
 **Queue explorer:** https://8-bitrhyon.github.io/flyrank-ml-internship/queue/
+**Live API:** https://flyrank-ctr-queue.rhyonfs.workers.dev/queue?limit=5
 
 ## The result
 

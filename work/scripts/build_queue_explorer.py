@@ -110,7 +110,8 @@ html = f"""<!DOCTYPE html>
   <p class="foot">
     Public-safe view. No client names, domains, URLs, or queries appear here. Identifiers are omitted.
     The queue is decision-support, not a forecast. Read the
-    <a href="../paper/">paper</a> for the method, the validation, and the limits.
+    <a href="../paper/">paper</a> for the method, the validation, and the limits. Use the
+    <a href="https://flyrank-ctr-queue.rhyonfs.workers.dev/queue?limit=20">JSON API</a> for programmatic access.
   </p>
 </div>
 <script>
