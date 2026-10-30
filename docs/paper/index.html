@@ -95,8 +95,8 @@
       this study builds March 2026 page-months and labels April CTR against position-tier peers. A
       25-feature gradient-boosted model is compared with a transparent CTR-gap rule on a five-fold
       client-grouped split, then tested on a later period. The model improves precision@140 by 5.5
-      points over the rule, with a bootstrap 95% interval of +1.4 to +10.0, and does not fall below
-      the rule on a time-forward test. The gain comes from prior-month trend and content metadata,
+      points over the rule, with a bootstrap 95% interval of +1.4 to +10.0, and holds that edge at
+      small and medium budgets on a time-forward test. The gain comes from prior-month trend and content metadata,
       while the rule stays better under a time-forward test when the budget is large.
     </p>
   </div>
@@ -275,7 +275,8 @@
   <h3>What survives a time-forward test</h3>
   <p>
     A model trained on January into February and tested on March into April is the deployment-like
-    test. The base model falls below the rule. The rich model does not.
+    test. The base model falls below the rule at every budget. The rich model holds at small and
+    medium budgets and falls behind at K=5000.
   </p>
   <table>
     <thead><tr><th>Method</th><th class="num">K=50</th><th class="num">K=140</th><th class="num">K=5000</th></tr></thead>
