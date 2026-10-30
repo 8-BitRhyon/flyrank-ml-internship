@@ -163,7 +163,6 @@ def cv_curve(frame, label):
 late_cv, late_oof, _ = cv_curve(late, "late")
 early_cv, early_oof, _ = cv_curve(early, "early")
 
-# Time-forward: train on the early period, test on the late period.
 Xr_late = late[RICH].fillna(0)
 Xb_late = late[BASIC].fillna(0)
 forward = {}
@@ -194,7 +193,6 @@ for k in [50, 140]:
         "prob_gap_positive": float((gaps > 0).mean()),
     }
 
-# Figures.
 colors = {"rule": "#c00000", "basic": "#7f7f7f", "rich": "#1f4e79"}
 fig, ax = plt.subplots(figsize=(8.2, 4.6))
 for name in ["rule", "basic", "rich"]:
