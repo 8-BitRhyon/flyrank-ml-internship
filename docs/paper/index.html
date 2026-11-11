@@ -94,17 +94,17 @@
       question is which pages come first. Using 9.8 million daily rows from the FlyRank warehouse,
       this study builds March 2026 page-months and labels April CTR against position-tier peers. A
       25-feature gradient-boosted model is compared with a transparent CTR-gap rule on a five-fold
-      client-grouped split, then tested on a later period. The model improves precision@140 by 5.5
-      points over the rule, with a bootstrap 95% interval of +1.4 to +10.0, and holds that edge at
-      small and medium budgets on a time-forward test. The gain comes from prior-month trend and content metadata,
-      while the rule stays better under a time-forward test when the budget is large.
+      client-grouped split, then tested on a later period. The model reaches 0.987 precision@140
+      against 0.966 for the rule, and the pooled out-of-fold gap is 5.5 points with a 95% interval
+      of +1.4 to +10.0. The gain comes from prior-month trend and content metadata, while the rule
+      stays better under a time-forward test when the budget is large.
     </p>
   </div>
 
   <div class="stats">
     <div class="stat"><div class="num">9.8M</div><div class="lbl">March daily rows scanned</div></div>
     <div class="stat"><div class="num">58,477</div><div class="lbl">labeled page-months</div></div>
-    <div class="stat"><div class="num">+5.5</div><div class="lbl">precision@140 points over the rule</div></div>
+    <div class="stat"><div class="num">+2.1</div><div class="lbl">precision@140 points over the rule, five-fold mean</div></div>
     <div class="stat"><div class="num">0.971</div><div class="lbl">model precision@140, time-forward</div></div>
   </div>
 
@@ -238,6 +238,8 @@
   </table>
   <p class="caption">
     Table 1. Five-fold client-grouped CV, March into April. Base rate 0.572. Random precision@140 is 0.572.
+    Each fold ranks its own top 140, so this is the conservative reading. The bootstrap below ranks the
+    pooled out-of-fold predictions once, which gives a larger gap.
   </p>
 
   <figure>

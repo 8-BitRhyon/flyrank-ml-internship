@@ -194,6 +194,11 @@ for k in [50, 140]:
         "prob_gap_positive": float((gaps > 0).mean()),
     }
 
+pooled = {
+    name: {str(k): p_at(late_oof[name], y_late, k) for k in [50, 140, 500]}
+    for name in ["rule", "basic", "rich"]
+}
+
 prob = late_oof["rich"]
 brier = brier_score_loss(y_late, prob)
 edges = np.linspace(0.0, 1.0, 11)
@@ -285,6 +290,7 @@ metrics = {
     "early_cv": early_cv,
     "time_forward": forward,
     "bootstrap": boot,
+    "pooled_oof": pooled,
     "calibration": {"brier": float(brier), "bins": calibration},
 }
 (OUT / "excellence_metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")
