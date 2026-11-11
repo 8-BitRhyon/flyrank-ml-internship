@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Which Pages First? A Validated CTR Opportunity Queue for Content Review</title>
-<meta name="description" content="A CTR opportunity model for content review, built on the FlyRank ML Internship warehouse. A 25-feature model beats a transparent rule by 5.5 points at a 140-review budget, and the rule stays better when the budget is large.">
+<meta name="description" content="A CTR opportunity model for content review, built on the FlyRank ML Internship warehouse. A 25-feature model beats a transparent rule by 5.7 points on the pooled out-of-fold ranking, and the rule stays better when the budget is large.">
 <style>
   :root {
     --ink: #1b1b1b; --muted: #5b5b5b; --rule: #d9d5cc; --paper: #fbfaf7;
@@ -95,7 +95,7 @@
       this study builds March 2026 page-months and labels April CTR against position-tier peers. A
       25-feature gradient-boosted model is compared with a transparent CTR-gap rule on a five-fold
       client-grouped split, then tested on a later period. The model reaches 0.987 precision@140
-      against 0.966 for the rule, and the pooled out-of-fold gap is 5.5 points with a 95% interval
+      against 0.966 for the rule, and the pooled out-of-fold gap is 5.7 points with a 95% interval
       of +1.4 to +10.0. The gain comes from prior-month trend and content metadata, holds across
       three consecutive periods, and reverses only at very large budgets under a time-forward test.
     </p>
@@ -261,7 +261,7 @@
   <h3>The gain is measurable, not noise</h3>
   <p>
     A client bootstrap on the out-of-fold predictions gives a 95% interval on the gap between the rich
-    model and the rule. At K=140 the gap is +5.5 points, with an interval of +1.4 to +10.0, and 99.6%
+    model and the rule. At K=140 the gap is +5.7 points, with an interval of +1.4 to +10.0, and 99.6%
     of resamples favor the model. At K=50 the gap is +6.2 points, with an interval of 0.0 to +12.0,
     so the small-budget result is directionally positive but touches zero.
   </p>

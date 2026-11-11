@@ -48,7 +48,7 @@ Five-fold client-grouped CV, March 2026 features into April 2026 labels.
 | Base model, 5 features | 0.972 | 0.967 | 0.949 |
 | This model, 25 features | 1.000 | 0.987 | 0.954 |
 
-- Five-fold mean: 0.987 against 0.966, a +2.1 point gap. The pooled out-of-fold gap is +5.5 points, with a 95% interval of +1.4 to +10.0.
+- Five-fold mean: 0.987 against 0.966, a +2.1 point gap. The pooled out-of-fold gap is +5.7 points, with a 95% interval of +1.4 to +10.0.
 - Time-forward test, trained on January-February and tested on March-April: **0.971 at K=140**, against **0.943** for the rule.
 - Three consecutive periods: above the rule in **all nine** period-by-budget cells. The January period is the weakest, at 0.829 against 0.796.
 - Top-140 misses fall from about 5 to about 2 per 140 reviewed.
