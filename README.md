@@ -24,6 +24,7 @@ Five-fold client-grouped CV, March 2026 features into April 2026 labels. The ric
 above the rule at K=140, with a client-bootstrap 95% interval of +1.4 to +10.0. The base model ties
 the rule in-period and falls below it time-forward, so the gain comes from features, not from model
 class. At K=5000 the rule wins under the time-forward test, so the recommendation is budget-dependent.
+The direction holds across three consecutive month pairs, and in both forward transfers.
 
 ## What is in this repo
 

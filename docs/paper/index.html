@@ -96,8 +96,8 @@
       25-feature gradient-boosted model is compared with a transparent CTR-gap rule on a five-fold
       client-grouped split, then tested on a later period. The model reaches 0.987 precision@140
       against 0.966 for the rule, and the pooled out-of-fold gap is 5.5 points with a 95% interval
-      of +1.4 to +10.0. The gain comes from prior-month trend and content metadata, while the rule
-      stays better under a time-forward test when the budget is large.
+      of +1.4 to +10.0. The gain comes from prior-month trend and content metadata, holds across
+      three consecutive periods, and reverses only at very large budgets under a time-forward test.
     </p>
   </div>
 
@@ -311,6 +311,32 @@
     and behind at K=5000, where the rule's stability wins.
   </p>
 
+  <h3>Three consecutive periods</h3>
+  <p>
+    The same comparison runs on three consecutive month pairs. The rich model is above the rule in
+    all nine period-by-budget cells. The January period is the weakest: the rule falls to 0.796 at
+    K=140, and the basic model edges the rich model there, 0.843 against 0.829.
+  </p>
+  <table>
+    <thead><tr><th>Period</th><th class="num">Rule</th><th class="num">Base, 5 features</th><th class="num">Rich, 25 features</th></tr></thead>
+    <tbody>
+      <tr><td>January into February</td><td class="num">0.796</td><td class="num">0.843</td><td class="num">0.829</td></tr>
+      <tr><td>February into March</td><td class="num">0.941</td><td class="num">0.947</td><td class="num">0.973</td></tr>
+      <tr class="highlight"><td>March into April</td><td class="num">0.966</td><td class="num">0.967</td><td class="num">0.987</td></tr>
+    </tbody>
+  </table>
+  <p class="caption">
+    Table 3. Precision@140, five-fold client-grouped CV, three consecutive periods.
+  </p>
+
+  <figure>
+    <img src="figures/three_periods.png" alt="Bar chart of precision at 140 for the rule, the 5-feature model, and the 25-feature model across three consecutive month pairs.">
+  </figure>
+  <p class="caption">
+    Figure 5. Three periods, same folds, same features. The direction is consistent even where the
+    magnitude moves.
+  </p>
+
   <h3>Where the errors are</h3>
   <p>
     The model's top 140 contained two misses in the earlier five-feature audit. Both were top-3 pages
@@ -353,7 +379,7 @@
     </tbody>
   </table>
   <p class="caption">
-    Table 3. The 140-slot queue for March 2026, after excluding deep pages and requiring 500
+    Table 4. The 140-slot queue for March 2026, after excluding deep pages and requiring 500
     impressions and 20 days of search data.
   </p>
 
@@ -392,6 +418,7 @@
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/MODEL_CARD.md">Model card</a> and <a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/DATA_CARD.md">data card</a>: intended use, limits, provenance.</li>
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/DECISION_MEMO.md">Decision memo</a>: the one-page version for an editor.</li>
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/scripts/excellence_analysis.py">Excellence analysis</a>: rich features, five-fold CV, bootstrap, two-period replication, figures.</li>
+    <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/scripts/robustness_analysis.py">Three-period robustness</a>: January, February, and March pairs, with both forward transfers.</li>
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/capstone.ipynb">Capstone notebook</a>: mirrors this paper end to end.</li>
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/w03_data_contract.ipynb">Data contract</a>: grain, windows, label, exclusions, three verification queries.</li>
     <li><a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/notebooks/w05_model.ipynb">Model comparison</a>: four models, five seeds, permutation importance.</li>
@@ -401,6 +428,7 @@
   <p>
     Seeds are fixed at 42 and row order is sorted before every split. The receipts are
     <a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/outputs/excellence_metrics.json"><code>excellence_metrics.json</code></a>,
+    <a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/outputs/robustness_metrics.json"><code>robustness_metrics.json</code></a>,
     <a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/outputs/capstone_metrics.json"><code>capstone_metrics.json</code></a>,
     and <a href="https://github.com/8-BitRhyon/flyrank-ml-internship/blob/main/work/outputs/ml10_playbook_metrics.json"><code>ml10_playbook_metrics.json</code></a>.
     To regenerate the key tables and figures, run <code>work/scripts/excellence_analysis.py</code>
